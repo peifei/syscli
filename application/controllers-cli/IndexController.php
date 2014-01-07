@@ -1,8 +1,4 @@
 <?php
-
-
-
-
 class IndexController extends Application_Controller_Cli
 {
 
@@ -13,7 +9,27 @@ class IndexController extends Application_Controller_Cli
 	 */
 	public function indexAction ()
 	{
-		echo "It is I.\n";
+	    try{
+            $periodflagService=new Application_Service_PeriodInit();
+            $periodfalg=$periodflagService->initPeriodFlag();
+            $fxcmDataer=new Application_Service_Dataimport_FxcmDataer();
+            $fxcmDataer->doimport($periodfalg);
+            //$standardService=new Application_Service_Standard();
+            //$standardService->dynamicUpdatePeriodStandard(2,null,'201312', 5);
+            //$standardService->dynamicUpdatePeriodStandard(2,1,'201312', 5);
+            //$standardService->dynamicUpdatePeriodStandard(2,2,'201312', 5);
+            //$standardService->dynamicUpdatePeriodStandard(2,3,'201312', 5);
+            $ironfxDataer=new Application_Service_Dataimport_IronFxDataer();
+            $ironfxDataer->doimport($periodfalg);
+            echo 'success';
+        }catch (Exception $e){
+            echo $e->getMessage();
+        }
+	}
+	
+	
+	public function testAction(){
+	    echo "it is test";
 	}
 
 
