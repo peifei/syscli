@@ -15,9 +15,11 @@ class Application_Service_PeriodInit
         $ironfxPath=$config->ironfxPath;
         
         //TODO配置文件中设置路径
+        
         $fileTool=new Application_Service_Fileimport_Tools();
         $fxcmflag=$fileTool->getPeriodflagFromFile($fxcmPath);
         $ironfxflag=$fileTool->getPeriodflagFromFile($ironfxPath);
+        
         if($fxcmflag==$ironfxflag){
             return $fxcmflag;
         }else{
@@ -65,6 +67,8 @@ class Application_Service_PeriodInit
     }
     public function initPeriodStandard($periodflag){
         $dbStdPrdRecords=new Application_Model_DbTable_StdPrdRecords();
+        $dbStdPrdRecords->getAdapter()->beginTransaction();
+        try{
         $dbUserIdentify=new Application_Model_DbTable_UserIdentify();
         $dbBrokerageStandard= new Application_Model_DbTable_BrokerageStandard();
         $res=$dbUserIdentify->fetchAll("user_type='member'");
@@ -87,19 +91,26 @@ class Application_Service_PeriodInit
         $subRes=$dbSubUserInfo->fetchAll();
         $records2=array();
         foreach ($subRes as $re){
-            $record2=array();
-            $record2['user_id']=$re['user_id'];
-            $record2['sub_user_id']=$re['id'];
-            $record2['periodflag']=$periodflag;
-            $temparr2=explode(",", $re['standard_id']);
-            foreach ($temparr2 as $tempid2) {
-                $back2=$dbBrokerageStandard->getStandardById($tempid2);
-                $record2['standard_id']=$tempid2;
-                $record2['fes_id']=$back2->fes_id;
-                $records2[]=$record2;
+            if(!is_null($re['standard_id'])){
+                $record2=array();
+                $record2['user_id']=$re['user_id'];
+                $record2['sub_user_id']=$re['id'];
+                $record2['periodflag']=$periodflag;
+                $temparr2=explode(",", $re['standard_id']);
+                foreach ($temparr2 as $tempid2) {
+                    $back2=$dbBrokerageStandard->getStandardById($tempid2);
+                    $record2['standard_id']=$tempid2;
+                    $record2['fes_id']=$back2->fes_id;
+                    $records2[]=$record2;
+                }
             }
         }
         $dbStdPrdRecords->addNewRecords($records2);
+            $dbStdPrdRecords->getAdapter()->commit();
+        }catch (Exception $e){
+            $dbStdPrdRecords->getAdapter()->rollBack();
+            throw $e;
+        }
     }
     /**
      * 初始化时取复合标准的最低普通标准作为复合标准的默认值

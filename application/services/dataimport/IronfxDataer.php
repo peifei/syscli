@@ -23,12 +23,10 @@ Application_Service_Dataimport_DataAbstract{
         $db2=zend_db::factory($db2['adapter'],$db2['params']);
         $selecter=$db2->select()->from('ironfx_commission_per_symbol')->where("volume is not null and datemm='".$periodflag."'");
         $res=$db2->fetchAll($selecter);
-        var_dump($res);
         $db=Zend_Db_Table_Abstract::getDefaultAdapter();
         $db->beginTransaction();
         try{
             foreach($res as $re){
-                echo "ironfx dataer";
                 unset($re['datemm']);
                 //unset($re['scraped']);
                 unset($re['id']);

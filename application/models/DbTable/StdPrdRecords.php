@@ -8,7 +8,7 @@ class Application_Model_DbTable_StdPrdRecords extends Application_Model_DbTable_
 {
 
     protected $_name = 'standard_period_records';
-    protected $_dbname='base';
+    protected $_dbname='web';
     /**
      * 添加新记录
      * @param unknown_type $records
