@@ -9,7 +9,7 @@ Application_Service_Dataimport_DataAbstract{
     public function __construct(){
         $dbFesBaseInfo=new Application_Model_DbTable_FesBaseInfo();
         $fes=$dbFesBaseInfo->getFesIdByName('FXCM');
-        $this->fesId=$fes['id'];
+            $this->fesId=$fes['id'];
     }
     /**
      * 倒入数据方法
@@ -25,6 +25,7 @@ Application_Service_Dataimport_DataAbstract{
         
         $db=Zend_Db_Table_Abstract::getDefaultAdapter();
         $db->beginTransaction();
+        $db2->beginTransaction();
         try{
             foreach($res as $re){
                 unset($re['datemm']);
@@ -32,11 +33,14 @@ Application_Service_Dataimport_DataAbstract{
                 unset($re['id']);
                 if($this->resFilter($re)){
                     $this->insertData($db, $re, $periodflag);
+                    $this->insertData($db2, $re, $periodflag);
                 }
             }
             $this->CalData($periodflag);
+            $db2->commit();
             $db->commit();
         }catch(Exception $e){
+            $db2->rollBack();
             $db->rollBack();
             throw $e;
         }

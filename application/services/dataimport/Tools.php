@@ -1,5 +1,5 @@
 <?php
-class Application_Service_Fileimport_Tools
+class Application_Service_Dataimport_Tools
 {
     /**
      * 导入指定文件夹中的文件
@@ -19,7 +19,7 @@ class Application_Service_Fileimport_Tools
             }
             return $fileList;
         }else{
-            throw new Exception('指定的文件夹('.$path.')不存在');
+            throw new Exception("the file or path:(".$path.") didn't exist");
         }
     }
     
@@ -51,7 +51,7 @@ class Application_Service_Fileimport_Tools
                 }
             }
         }else{
-            throw new Exception('配置文件读取异常');
+            throw new Exception('can not read config file!!!!');
         }
     }
 }

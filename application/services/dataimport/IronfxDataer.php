@@ -25,6 +25,7 @@ Application_Service_Dataimport_DataAbstract{
         $res=$db2->fetchAll($selecter);
         $db=Zend_Db_Table_Abstract::getDefaultAdapter();
         $db->beginTransaction();
+        $db2->beginTransaction();
         try{
             foreach($res as $re){
                 unset($re['datemm']);
@@ -35,11 +36,14 @@ Application_Service_Dataimport_DataAbstract{
                 unset($re['status']);
                 if($this->resFilter($re)){
                     $this->insertData($db, $re, $periodflag);
+                    $this->insertData($db2, $re, $periodflag);
                 }
             }
             $this->CalData($periodflag);
+            $db2->commit();
             $db->commit();
         }catch (Exception $e){
+            $db2->rollBack();
             $db->rollBack();
             throw $e;
         }

@@ -14,16 +14,15 @@ class Application_Service_PeriodInit
         $fxcmPath=$config->fxcmPath;
         $ironfxPath=$config->ironfxPath;
         
-        //TODO配置文件中设置路径
         
-        $fileTool=new Application_Service_Fileimport_Tools();
+        $fileTool=new Application_Service_Dataimport_Tools();
         $fxcmflag=$fileTool->getPeriodflagFromFile($fxcmPath);
         $ironfxflag=$fileTool->getPeriodflagFromFile($ironfxPath);
         
         if($fxcmflag==$ironfxflag){
             return $fxcmflag;
         }else{
-            throw new Exception("配置文件periodflag设置不统一,请检查");
+            throw new Exception("the periodflag is different in configfiles, plaease check these file!!!!!!!");
         }
     }
     /**
@@ -40,10 +39,12 @@ class Application_Service_PeriodInit
             $lastRecordPeriod=$dbPeriodRecords->getLastPeriod();
         }catch (Exception $e){
             //01说明周期标记的表还是空的，里面没有记录
-            if('01'!=$e->getCode()){
-                throw $e;
+            if('2002'==$e->getCode()){
+                throw new Exception('database error!!!');
             }else{
-                $lastRecordPeriod['periodflag']=null;
+                if('01'==$e->getCode()){
+                    $lastRecordPeriod['periodflag']=null;
+                }
             }
         }
         //如果文件中获取到的周期标记和数据库中不一致，则执行新添加动作
