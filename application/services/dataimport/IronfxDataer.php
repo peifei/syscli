@@ -56,7 +56,13 @@ Application_Service_Dataimport_DataAbstract{
      * @param unknown_type $totalarray
      */
     private function resFilter(Array $data){
-        if(!isset($data['commission'])){
+        if(!isset($data['commission'])||''==$data['commission']){
+            return false;
+        }
+        if(!isset($data['volume'])||''==$data['volume']){
+            return false;
+        }
+        if(!isset($data['symbol'])||''==$data['symbol']){
             return false;
         }
         return true;
