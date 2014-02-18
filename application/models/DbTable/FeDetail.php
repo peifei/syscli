@@ -228,8 +228,8 @@ class Application_Model_DbTable_FeDetail extends Application_Model_DbTable_Abstr
      */
     public function getAllAdjustList(){
         $selecter=$this->_db->select()->from(array('a'=>$this->_name))
-                            ->joinLeft(array('b'=>WEBDB.'.sub_user_info'),'a.sub_user_id=b.id',array('sub_user_name'))
-                            ->joinLeft(array('c'=>WEBDB.'.user_identify'), 'a.user_id=c.id',array('user_email'))
+                            ->joinLeft(array('b'=>$this->webdb.'.sub_user_info'),'a.sub_user_id=b.id',array('sub_user_name'))
+                            ->joinLeft(array('c'=>$this->webdb.'.user_identify'), 'a.user_id=c.id',array('user_email'))
                             ->where("a.adjust_flag =1");
         $res=$this->_db->fetchAll($selecter);
         return $res;

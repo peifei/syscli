@@ -33,6 +33,10 @@ class IndexController extends Application_Controller_Cli
             $ironfxDataer=new Application_Service_Dataimport_IronFxDataer();
             $ironfxDataer->doimport($periodfalg);
             $db2->update('log', array('end_time'=>new Zend_Db_Expr('now()'),'status'=>'success'),"id=".$id);
+            
+            echo "********import verify data*********\n";
+            $verifyDataer=new Application_Service_Dataimport_VerifyDataer();
+            $verifyDataer->importdata();
             echo 'success';
         }catch (Exception $e){
             $db2->update('log', array('end_time'=>new Zend_Db_Expr('now()'),'status'=>$e->getMessage()),"id=".$id);

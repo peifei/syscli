@@ -4,7 +4,7 @@ class Application_Model_DbTable_FesBaseInfo extends Application_Model_DbTable_Ab
 {
 
     protected $_name = 'fes_base_info';
-    protected $_dbname='base';
+    protected $_dbname='web';
     
     public function addNewFes($data){
         $this->insert($data);

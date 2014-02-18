@@ -1,0 +1,42 @@
+CREATE TABLE IF NOT EXISTS `fxcmdata` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `office_grouping_type` tinyint(1) DEFAULT NULL,
+  `grouping_type` tinyint(1) DEFAULT NULL,
+  `office_name` varchar(50) DEFAULT NULL,
+  `customer_name` varchar(50) DEFAULT NULL,
+  `country` varchar(50) DEFAULT NULL,
+  `account` varchar(50) DEFAULT NULL,
+  `symbol` varchar(20) DEFAULT NULL,
+  `volume_opened` varchar(10) DEFAULT NULL,
+  `volume_closed` varchar(10) DEFAULT NULL,
+  `month` varchar(10) DEFAULT NULL,
+  `periodflag` varchar(10) NOT NULL,
+  `transformed` tinyint(1) NOT NULL COMMENT '0:未转换；1已转换',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `account` (`account`,`symbol`,`periodflag`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `ironfxdata` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `ib` varchar(10) NOT NULL,
+  `login` varchar(15) NOT NULL,
+  `symbol` varchar(20) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `volume` varchar(20) NOT NULL,
+  `commission` varchar(20) NOT NULL,
+  `month` varchar(20) DEFAULT NULL,
+  `scraped` datetime NOT NULL,
+  `periodflag` varchar(10) NOT NULL,
+  `transformed` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:未转换；1已转换',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(9) NOT NULL AUTO_INCREMENT,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime DEFAULT NULL,
+  `status` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
