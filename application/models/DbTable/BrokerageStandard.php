@@ -183,12 +183,14 @@ class Application_Model_DbTable_BrokerageStandard extends Application_Model_DbTa
         $dbStdPrdRecords=new Application_Model_DbTable_StdPrdRecords();
         //查询标准周期表中用户、周期、汇商id对应的标准id
         $standsObj=$dbStdPrdRecords->getUserPeriodStandard($uid,$peirodflag,$fesid);
-        $stdId=$standsObj->standard_id;
-        //查询是否符合标准，如果是符合标准查询当前应用的动态条件
-        $stdId=Application_Service_Standard::dynamicUpdatePeriodStandard($uid,null,$peirodflag, $stdId);
-        //根据标准id查询标准详细信息
-        $res=$this->fetchRow("id='".$stdId."'");
-        return $res;
+        if(isset($standsObj)){
+            $stdId=$standsObj->standard_id;
+            //查询是否符合标准，如果是符合标准查询当前应用的动态条件
+            $stdId=Application_Service_Standard::dynamicUpdatePeriodStandard($uid,null,$peirodflag, $stdId);
+            //根据标准id查询标准详细信息
+            $res=$this->fetchRow("id='".$stdId."'");
+            return $res;
+        }
     }
     /**
      * 取得下级用户的返佣标准
@@ -200,12 +202,14 @@ class Application_Model_DbTable_BrokerageStandard extends Application_Model_DbTa
         $dbStdPrdRecords=new Application_Model_DbTable_StdPrdRecords();
         //查询标准周期表中用户、周期、汇商id对应的标准id
         $standsObj=$dbStdPrdRecords->getSubUserPeriodStandard($uid,$subId,$periodflag,$fesid);
-        $stdId=$standsObj->standard_id;
-        //查询是否符合标准，如果是符合标准查询当前应用的动态条件
-        $stdId=Application_Service_Standard::dynamicUpdatePeriodStandard($uid,null,$periodflag, $stdId);
-        //根据标准id查询标准详细信息
-        $res=$this->fetchRow("id='".$stdId."'");
-        return $res;
+        if(isset($standsObj)){
+            $stdId=$standsObj->standard_id;
+            //查询是否符合标准，如果是符合标准查询当前应用的动态条件
+            $stdId=Application_Service_Standard::dynamicUpdatePeriodStandard($uid,null,$periodflag, $stdId);
+            //根据标准id查询标准详细信息
+            $res=$this->fetchRow("id='".$stdId."'");
+            return $res;
+        }
     }
     /**
      * 取得默认标准

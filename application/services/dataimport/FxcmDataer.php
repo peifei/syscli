@@ -27,6 +27,7 @@ Application_Service_Dataimport_DataAbstract{
         $db->beginTransaction();
         $db2->beginTransaction();
         try{
+            $i=1;
             foreach($res as $re){
                 unset($re['datemm']);
                 unset($re['scraped']);
@@ -34,8 +35,11 @@ Application_Service_Dataimport_DataAbstract{
                 if($this->resFilter($re)){
                     $this->insertData($db, $re, $periodflag);
                     $this->insertData($db2, $re, $periodflag);
+                    echo "********fxcm insert ".$i." data*********\n";
+                    $i++;
                 }
             }
+            echo "********begin calculate*********\n";
             $this->CalData($periodflag);
             $db2->commit();
             $db->commit();

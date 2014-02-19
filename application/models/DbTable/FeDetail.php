@@ -302,6 +302,9 @@ class Application_Model_DbTable_FeDetail extends Application_Model_DbTable_Abstr
         return $res;
     }
     
+    public function clearDataByPeriod($periodflag){
+        $this->delete("periodflag='".$periodflag."'");
+    }
 
     
 

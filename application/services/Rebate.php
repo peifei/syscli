@@ -74,9 +74,13 @@ class Application_Service_Rebate
         $userData['rebate']=$this->getRebate($userStand, $userData['fe_quantity']);
         
         $dbFeDetail=new Application_Model_DbTable_FeDetail();
-        $res=$dbFeDetail->fetchAll("fe_account_num='".$userData['fe_account_num']."' and fe_name='".$userData['fe_name']."' and periodflag='".$userData['periodflag']."'");
+        
+        
+        
+        
+       /* $res=$dbFeDetail->fetchAll("fe_account_num='".$userData['fe_account_num']."' and fe_name='".$userData['fe_name']."' and periodflag='".$userData['periodflag']."'");
         $count=count($res);
-        if(0==$count){//如果没有记录则直接插入新记录
+        if(0==$count){//如果没有记录则直接插入新记录*/
             //执行插入操作
             $subUserId=$this->accInfo['sub_user_id'];
             //如果帐号对应没有下级的话
@@ -99,7 +103,7 @@ class Application_Service_Rebate
                 }
             }
             $dbFeDetail->addRecords($records);
-        }else{
+/*        }else{
             //执行更新操作
             $subUserId=$this->accInfo['sub_user_id'];
             //如果账号对应没有下级的话
@@ -143,10 +147,7 @@ class Application_Service_Rebate
                 }
                 
             }
-        }
-        
-        
-        
+        }*/
     }
     /**
      * 计算返佣
@@ -154,15 +155,19 @@ class Application_Service_Rebate
      * @param unknown_type $quantity 手数
      */
     private function getRebate($standard,$quantity){
-        $standardArr=(array)json_decode($standard->standard,true);
-        $arrKey=array_keys($standardArr);
-        if(in_array($this->feType['id'], $arrKey)){
-            $var=$this->feType['id'];
-            //echo $this->feType['name'].'|'.$dataArr[$var]*$quantity.'<br/>';
-            $rebate=$standardArr[$var]*$quantity;
+        if(isset($standard)){
+            $standardArr=(array)json_decode($standard->standard,true);
+            $arrKey=array_keys($standardArr);
+            if(in_array($this->feType['id'], $arrKey)){
+                $var=$this->feType['id'];
+                //echo $this->feType['name'].'|'.$dataArr[$var]*$quantity.'<br/>';
+                $rebate=$standardArr[$var]*$quantity;
+            }
+            //TODO
+            return $rebate;
+        }else{
+            return 0;
         }
-        //TODO
-        return $rebate;
     }
     
     
